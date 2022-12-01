@@ -8,6 +8,7 @@
 
 unsigned char used[1 << 29];
 
+// set the current board into a integer between [0, 2^31]
 unsigned int encode(char board[][5], int self) {
     int positions[6];
     int n = 0;
@@ -32,17 +33,21 @@ unsigned int encode(char board[][5], int self) {
     return hash;
 }
 
+// for all boards, we need 2 bits to store its result, either win, lose, visited, or unseen
+// we need a size of 2^32 bits (2^31 keys * value of 2 bits) to store the hash and value
+// bit compress: 1 char = 8 bits -> 2^32 / 8 = 2^29
+// for an index in the char array, we store 4 different board results
 void reset_used() {
     for (unsigned int i = 0; i < (1 << 29); ++i) {
         used[i] = 0;
     }
 }
 
-void set_bit(unsigned int hash, int value) {
+void set_bit(unsigned int bit_i, int value) {
     if (value) {
-        used[hash / 8] |= 1 << (hash % 8);
+        used[bit_i / 8] |= 1 << (bit_i % 8);
     } else {
-        used[hash / 8] &= ~(1 << (hash % 8));
+        used[bit_i / 8] &= ~(1 << (bit_i % 8));
     }
 }
 
