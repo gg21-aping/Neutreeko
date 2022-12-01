@@ -13,6 +13,8 @@ int dy[8] = {1, 0, -1, 0, 1, -1, 1, -1};
 char SELF;
 char OPPONENT;
 
+int count = 0;
+
 void print_usage(char *executable) {
     fprintf(stderr, "Usage: %s [0, 1]\n", executable);
 }
@@ -58,8 +60,15 @@ int main(int argc, char *argv[]) {
     char move[10];
 
     while (1) {
+        // Draw
+        if (count == 300) {
+            printf("Draw");
+            break;
+        }
+
         // if computer goes first
         if (computer) {
+            count++;
 
 #ifdef USE_HASH
             reset_used();
@@ -84,6 +93,7 @@ int main(int argc, char *argv[]) {
             fgets(move, sizeof move, stdin);
             // check invalid move
             if (go_opponent(board, move)) {
+                count++;
                 break;
             }
             printf("Invalid move, please enter again:\n");
