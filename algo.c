@@ -1,7 +1,7 @@
 #include "algo.h"
 #include "board.h"
 #include "hash.h"
-#include "macro_variable.h"
+#include "variable.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,11 +57,12 @@ int run(char board[][5], int depth, int *x, int *y, int *dir, int alpha, int bet
     char board_next[5][5];
     int best_value = self ? MIN : MAX;
     int nx = -1, ny = -1, nd = -1;
+    int temp_1, temp_2;
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
             if ((self && board[i][j] == SELF) || (!self && board[i][j] == OPPONENT)) {
                 for (int k = 0; k < 8; ++k) {
-                    if (!go_direction(board, board_next, i, j, dx[k], dy[k])) {
+                    if (!go_direction(board, board_next, i, j, dx[k], dy[k], &temp_1, &temp_2)) {
                         continue;
                     }
                     int temp = run(board_next, depth + 1, &nx, &ny, &nd, alpha, beta);

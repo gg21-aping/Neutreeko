@@ -1,7 +1,7 @@
 #include "algo.h"
 #include "board.h"
 #include "hash.h"
-#include "macro_variable.h"
+#include "variable.h"
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
 
     // Start game.
     int x, y, dir;
+    int new_x, new_y;
     char move[10];
 
     while (1) {
@@ -66,11 +67,11 @@ int main(int argc, char *argv[]) {
             printf("Running...\n\n");
             run(board, 0, &x, &y, &dir, MIN, MAX);
             // Re-write the board in-place.
-            go_direction(board, board, x, y, dx[dir], dy[dir]);
-
+            go_direction(board, board, x, y, dx[dir], dy[dir], &new_x, &new_y);
+            printf("%c%c%c%c\n", '5' - x, 'A' + y, '5' - new_x, 'A' + new_y);
             print_board(board);
             if (board_value(board) == VALUE_WIN) {
-                printf("You lose\n");
+                printf("You Lose\n");
                 break;
             }
         }
@@ -92,7 +93,7 @@ int main(int argc, char *argv[]) {
 
         print_board(board);
         if (board_value(board) == VALUE_LOSE) {
-            printf("Congradulations! You WIN!\n");
+            printf("You Win!\n");
             break;
         }
         computer = 1;
