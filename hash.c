@@ -1,5 +1,5 @@
 #include "hash.h"
-#include "macro_variable.h"
+#include "variable.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
