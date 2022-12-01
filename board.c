@@ -1,5 +1,5 @@
 #include "board.h"
-#include "macro_variable.h"
+#include "variable.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,7 @@ void print_board(char board[][5]) {
     printf("    A   B   C   D   E\n");
     printf("  +---+---+---+---+---+\n");
     for (int i = 0; i < 5; ++i) {
-        printf("%d ", i + 1);
+        printf("%d ", 5 - i);
         for (int j = 0; j < 5; ++j) {
             printf("| %c ", board[i][j]);
         }
@@ -46,7 +46,7 @@ int board_value(char board[][5]) {
     return 0;
 }
 
-int go_direction(char board[][5], char board_next[][5], int x, int y, int dx, int dy) {
+int go_direction(char board[][5], char board_next[][5], int x, int y, int dx, int dy, int *new_x, int *new_y) {
     if (board[x][y] == EMPTY) {
         return 0;
     }
@@ -65,8 +65,8 @@ int go_direction(char board[][5], char board_next[][5], int x, int y, int dx, in
         if (in_bound(nx, ny) && board_next[nx][ny] == EMPTY) {
             board_next[nx][ny] = board_next[x][y];
             board_next[x][y] = EMPTY;
-            x = nx;
-            y = ny;
+            *new_x = x = nx;
+            *new_y = y = ny;
             ++steps;
         } else {
             break;
@@ -76,8 +76,8 @@ int go_direction(char board[][5], char board_next[][5], int x, int y, int dx, in
 }
 
 int go_opponent(char board[][5], char *cmd) {
-    int sx = cmd[0] - '1', sy = cmd[1] - 'A';
-    int ex = cmd[2] - '1', ey = cmd[3] - 'A';
+    int sx = 4 - (cmd[0] - '1'), sy = cmd[1] - 'A';
+    int ex = 4 - (cmd[2] - '1'), ey = cmd[3] - 'A';
     // Simple sanity check.
     if (!in_bound(sx, sy) || !in_bound(ex, ey)) {
         return 0;
